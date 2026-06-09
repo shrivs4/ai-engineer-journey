@@ -1,0 +1,15 @@
+{
+  "name": "Shriyam",
+  "role": "Forward Deployed Engineer",
+  "experience": 10,
+  "skills": [
+    "React",
+    "Next.js",
+    "Python",
+    "SQL",
+    "Docker",
+    "Kubernetes",
+    "LangChain"
+  ],
+  "target_role": "Forward Deployed Engineer at Anthropic"
+}
