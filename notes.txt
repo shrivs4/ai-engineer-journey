@@ -1,0 +1,4 @@
+Day 1 - Variables and functions
+Day 2 - Error handling
+Day 3 - JSON
+Day 4 - API calls
