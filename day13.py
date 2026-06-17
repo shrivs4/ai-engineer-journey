@@ -1,4 +1,9 @@
 import chromadb
+from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
+client = Anthropic()
 
 chroma_client = chromadb.Client()
 collection = chroma_client.create_collection(name="hr_policy")
@@ -21,4 +26,17 @@ results = collection.query(
     n_results = 2
 )
 
-print(results)
+reterived_chunks = results['documents'][0][0]
+
+prompt = f""" Answer the question using only this context:
+{reterived_chunks}
+Question: What's the policy if I'm unwell and need timeoff?
+"""
+
+response = client.messages.create(
+    model = "claude-sonnet-4-6",
+    max_tokens = 200,
+    messages = [{"role":"user","content":prompt}]
+)
+
+print(response.content[0].text)
