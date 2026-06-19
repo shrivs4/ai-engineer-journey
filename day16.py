@@ -6,7 +6,7 @@ import chromadb
 import re
 
 load_dotenv()
-open_ai_client = OpenAI()
+openai_client = OpenAI()
 claude_client = Anthropic()
 chroma_client = chromadb.Client()
 
@@ -30,9 +30,6 @@ chunks = chunk_by_size(clean_text,100,20)
 #     print(chunk)
 #     print()
 
-for i, chunk in enumerate(chunks):
-    if "Gemini" in chunk:
-        print(f"Chunk {i}: {chunk}")
 
 collection = chroma_client.create_collection(name="zfold7_v2")
 
@@ -44,5 +41,29 @@ results = collection.query(
     query_texts=["Does this phone work well with AI assistants?"],
     n_results = 2
 )
+
+question_embedding = openai_client.embeddings.create(
+    model = "text-embedding-3-small",
+    input = ["Does this phone work well with AI assistants?"]
+).data[0].embedding
+
+chunk0_embedding = openai_client.embeddings.create(
+    model="text-embedding-3-small",
+    input=[chunks[0]]
+).data[0].embedding
+
+chunk3_embedding = openai_client.embeddings.create(
+    model="text-embedding-3-small",
+    input=[chunks[3]]
+).data[0].embedding
+
+def cosine_similarity(a,b):
+    dot_product = sum(x * y for x,y in zip(a,b))
+    magnitude_a = sum(x ** 2 for x in a) ** 0.5
+    magnitude_b = sum(x ** 2 for x in b) ** 0.5
+    return dot_product / (magnitude_a * magnitude_b)
+
+print("chunk0 similarity:", cosine_similarity(question_embedding, chunk0_embedding))
+print("chunk3 similarity:", cosine_similarity(question_embedding, chunk3_embedding))
 
 # print(results['documents'])
