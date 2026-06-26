@@ -41,7 +41,8 @@ def askClaude():
     messages_to_give = [{"role":"user","content": "what is 847 * 936, then divide the result by 4?"}]
     stop_reason = response.stop_reason
     final_response = response
-    while stop_reason == "tool_use":
+    counter = 0
+    while stop_reason == "tool_use" and counter<10:
         for block in final_response.content:
             if block.type == "tool_use":
                 tool_call = block
@@ -61,6 +62,7 @@ def askClaude():
         tools = toolDescription,
         messages = messages_to_give
         )
+        counter+=1
         stop_reason = final_response.stop_reason
     print(final_response.content)
 
