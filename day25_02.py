@@ -164,13 +164,18 @@ graph = graph_builder.compile()
 #     "last_response": None
 # }
 
+# initial_state = {
+#     "messages": [{"role": "user", "content": "Who won the last F1 race?"}],
+#     "last_response": None
+# }
+
 initial_state = {
-    "messages": [{"role": "user", "content": "Who won the last F1 race?"}],
+    "messages": [{"role":"user","content": "Does Samsung Z Fold7 have AI"}],
     "last_response": None
 }
 
 result = graph.invoke(initial_state)
-print(result["messages"][-1])
+print(result["messages"][-1])   
 
 
 
