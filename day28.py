@@ -123,8 +123,11 @@ def doc_expert(state: AgentState):
 def router(state: AgentState):
     current = state["next"]
     last_tool = (m.type == "ai" for m in state["messages"])
+    ai_count = sum(1 for m in state["messages"] if m.type == "ai")
 
-    if current == "researcher":
+    if ai_count >= 2:
+        return END
+    elif current == "researcher":
         return "researcher"
     elif current == "doc_expert" and last_tool:
         return "researcher"
