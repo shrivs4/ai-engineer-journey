@@ -152,6 +152,6 @@ new_graph = graph.compile(checkpointer=memory)
 config = {"configurable":{"thread_id":"chat-1"},"recursion_limit": 10}
 
 new_graph.invoke(
-    {"messages": [{"role": "user", "content": "What is the battery capacity of the Z Fold7?"}]},
+    {"messages": [{"role": "user", "content": "Who won the most recent Formula 1 race?"}]},
     config
 )

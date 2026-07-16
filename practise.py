@@ -1,34 +1,25 @@
+from email import message
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
 
 
 class AgentState(TypedDict):
-    messages: str
+    messages: Annotated[list, add_messages]
+    next: str
 
-def first_node(state: AgentState):
-    new_message = state["messages"] + 'This is node one'
-    print(new_message)
-    return {
-        "messages": new_message
-    }
-
-def second_node(state: AgentState):
-    new_message = state["messages"] + 'This is node two'
-    print(new_message)
-    return {
-        "messages": new_message
-    }
+def router(state: AgentState):
+    if(state['next'] == "researcher"):
+        return "researcher" ##this just for example we are not wrtiing niode here 
+    else:
+        return END
 
 graph = StateGraph(AgentState)
 
-graph.add_node("first", first_node)
-graph.add_node("second", second_node)
-
-graph.add_edge(START, "first")
-graph.add_edge("first", "second")
-graph.add_edge("second", END)
-
+graph.add_conditional_edges('router', router)
 
 new_graph = graph.compile()
 
-new_graph.invoke({"messages": "Hello, this is the initial message."})
+new_graph.invoke({
+    "messages":[{"role":"user","content":"What is the battery capacity of the Z Fold7?"}]
+})
